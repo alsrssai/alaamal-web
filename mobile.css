@@ -1,0 +1,72 @@
+/* تخطيط الجوال (أندرويد وآيفون) — النسخة التجريبية */
+.trial-badge {
+  position: absolute; inset-inline-end: 10px; top: 10px;
+  background: #fff3cd; color: #8a6100; border: 1px solid #e0b84a; border-radius: 99px;
+  font-size: .72em; padding: 2px 10px; font-weight: 700;
+}
+.trial-note {
+  background: #fff8e1; color: #6b4e00; border: 1px dashed #e0b84a; border-radius: 12px;
+  padding: 10px 14px; margin-bottom: 14px; font-size: .9em; line-height: 1.8;
+}
+:root[data-theme="dark"] .trial-note { background: #3a2f12; color: #f0d78a; }
+:root[data-theme="dark"] .trial-badge { background: #3a2f12; color: #f0d78a; }
+
+/* ميزات غير مفعّلة في التجربة */
+.mobile #printPage, .mobile #dlgPrint, .mobile #dlgImage, .mobile #icsBtn,
+.mobile #exportBtn, .mobile #importBtn, .mobile #updRun, .mobile .print-btn { display: none !important; }
+
+html.mobile, .mobile body { -webkit-tap-highlight-color: transparent; }
+.mobile body { font-size: calc(16px * var(--fs)); }
+.mobile .top { box-shadow: 0 1px 4px rgba(0, 0, 0, .12); }
+.mobile .date-nav { padding: 10px 12px 2px; gap: 8px; }
+.mobile .date-box { min-width: 0; flex: 1; }
+.mobile .hijri { font-size: 1.25em; }
+.mobile .chip { position: static; }
+/* شريط التبويبات أفقي قابل للسحب بدل عدة أسطر */
+.mobile .tabs { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; padding: 2px 8px 0; }
+.mobile .tabs::-webkit-scrollbar { display: none; }
+.mobile .tabs button { flex: none; padding: 9px 12px; }
+.mobile .search-bar { padding: 6px 12px 8px; }
+.mobile main { padding: 12px 10px 80px; }
+.mobile .item { padding: 10px 12px; gap: 10px; }
+.mobile .check { width: 28px; height: 28px; }
+.mobile .read-btn { padding: 5px 10px; }
+.mobile .star { font-size: 1.4em; }
+.mobile .group-head { padding: 10px 12px; }
+.mobile .now-hero { padding: 16px; }
+.mobile .ptimes { grid-template-columns: repeat(3, 1fr); }
+.mobile .now-clock { font-size: 1.7em; }
+.mobile .profile-sel { position: static; }
+/* النوافذ بملء الشاشة */
+.mobile dialog { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; }
+.mobile .dlg { max-height: 100dvh; height: 100dvh; }
+.mobile .dlg-body { flex: 1; padding: 16px 16px; font-size: calc(1.45em * var(--read-scale, 1)); }
+.mobile .dlg-tools { overflow-x: auto; flex-wrap: nowrap; }
+.mobile .dlg-tools > * { flex: none; }
+.mobile .tasbih { justify-content: center; }
+.mobile .tb-btn { width: 120px; height: 120px; }
+.mobile .tb-btn b { font-size: 2.4em; }
+.mobile #reportDialog, .mobile #trialDialog { height: auto; max-height: 90dvh; margin: auto; width: 94vw; border-radius: 16px; }
+.mobile #reportDialog .dlg, .mobile #trialDialog .dlg { height: auto; }
+.mobile .set-row { flex-wrap: wrap; }
+.mobile .seg { flex-wrap: wrap; }
+.mobile .lib-grid { grid-template-columns: repeat(2, 1fr); }
+.mobile .cal { gap: 3px; }
+.mobile .cell { min-height: 54px; padding: 3px; }
+.mobile .cell .ev { display: none; }
+.mobile .ev-when { width: 88px; }
+.mobile .stat-grid { grid-template-columns: repeat(2, 1fr); }
+.mobile .hilal-bar .seg button { font-size: .8em; padding: 3px 6px; }
+
+/* آيفون: مراعاة النتوء وشريط الإيماءات في وضع التطبيق المثبّت */
+.mobile .top { padding-top: env(safe-area-inset-top); }
+.mobile main { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
+.mobile dialog .dlg-head { padding-top: calc(14px + env(safe-area-inset-top)); }
+.mobile dialog .dlg-src, .mobile .g-nav { padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+.install-hint {
+  position: fixed; inset-inline: 10px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 20;
+  background: var(--surface); border: 1px solid var(--accent); border-radius: 14px; padding: 12px 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .25); font-size: .92em; line-height: 1.8;
+}
+.install-hint b { color: var(--accent); }
+.install-hint button { float: left; background: none; border: none; font-size: 1.2em; color: var(--muted); }

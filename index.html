@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d6b52">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="الأعمال المستحبة">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>الأعمال المستحبة</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+<div id="printArea"></div>
+<header class="top">
+  <div class="date-nav">
+    <button class="icon-btn" id="prevDay" title="اليوم السابق">→</button>
+    <div class="date-box">
+      <div class="hijri" id="hijriDate"></div>
+      <div class="greg" id="gregDate"></div>
+    </div>
+    <button class="icon-btn" id="nextDay" title="اليوم التالي">←</button>
+    <button class="chip" id="goToday" hidden>العودة لليوم</button>
+    <select id="profileSel" class="profile-sel" hidden title="الفرد الحالي"></select>
+    <button class="icon-btn print-btn" id="printPage" title="طباعة هذه الصفحة">🖨</button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="now" class="active">الآن</button>
+    <button data-tab="today">أعمال اليوم</button>
+    <button data-tab="daily">الأعمال اليومية</button>
+    <button data-tab="mine">أدعيتي</button>
+    <button data-tab="library">المكتبة</button>
+    <button data-tab="month">الشهر الهجري</button>
+    <button data-tab="events">المناسبات</button>
+    <button data-tab="stats">الإنجاز</button>
+    <button data-tab="settings">الإعدادات</button>
+  </nav>
+  <div class="search-bar">
+    <input id="search" type="search" placeholder="ابحث في الأعمال والأدعية والنصوص…" autocomplete="off">
+  </div>
+</header>
+
+<main>
+  <section id="tab-now" class="tab active"></section>
+  <section id="tab-today" class="tab"></section>
+  <section id="tab-daily" class="tab"></section>
+  <section id="tab-mine" class="tab"></section>
+  <section id="tab-library" class="tab"></section>
+  <section id="tab-month" class="tab"></section>
+  <section id="tab-events" class="tab"></section>
+  <section id="tab-stats" class="tab"></section>
+  <section id="tab-settings" class="tab"></section>
+  <section id="tab-search" class="tab"></section>
+</main>
+
+<dialog id="textDialog">
+  <form method="dialog" class="dlg">
+    <div class="dlg-head">
+      <h2 id="dlgTitle"></h2>
+      <button type="button" class="icon-btn" id="dlgListen" title="استماع (بحث في يوتيوب)">🎧</button>
+      <button type="button" class="icon-btn" id="dlgCounter" title="عدّاد الأذكار">📿</button>
+      <button type="button" class="icon-btn star-btn" id="dlgStar" data-fav="" title="أدعيتي">☆</button>
+      <button class="icon-btn" value="close" title="إغلاق">✕</button>
+    </div>
+    <div class="dlg-tools">
+      <button type="button" class="tool" id="dlgSmaller" title="تصغير الخط">ا−</button>
+      <button type="button" class="tool" id="dlgBigger" title="تكبير الخط">ا+</button>
+      <select id="dlgFont" title="نوع الخط"></select>
+      <select id="dlgToc" title="الفهرس" hidden></select>
+      <button type="button" class="tool" id="dlgPaper" title="خلفية ورقية مريحة">📜 ورقي</button>
+      <span class="sp"></span>
+      <button type="button" class="tool" id="dlgCopy" title="نسخ النص">⧉ نسخ</button>
+      <button type="button" class="tool" id="dlgImage" title="حفظ الدعاء صورة">🖼 صورة</button>
+      <button type="button" class="tool" id="dlgPrint" title="طباعة الدعاء">🖨 طباعة</button>
+      <button type="button" class="tool" id="dlgReport" title="الإبلاغ عن خطأ في النص">⚑ خطأ؟</button>
+    </div>
+    <div class="dlg-body" id="dlgBody"></div>
+    <div class="tasbih" id="tasbih" hidden>
+      <button type="button" class="tb-btn" id="tbBtn" title="اضغط للعدّ (أو مفتاح المسافة)"><b id="tbCount">٠</b><small id="tbTarget"></small></button>
+      <div class="tb-side">
+        <div class="tb-label" id="tbLabel"></div>
+        <div class="seg" id="tbPresets">
+          <button type="button" data-v="z">الزهراء</button><button type="button" data-v="33">٣٣</button><button type="button" data-v="70">٧٠</button><button type="button" data-v="100">١٠٠</button><button type="button" data-v="0">∞</button>
+        </div>
+        <button type="button" class="read-btn" id="tbReset">↺ من جديد</button>
+      </div>
+    </div>
+    <div class="dlg-src" id="dlgSrc"></div>
+  </form>
+</dialog>
+
+<dialog id="guideDialog">
+  <form method="dialog" class="dlg">
+    <div class="dlg-head"><h2 id="gTitle"></h2><button class="icon-btn" value="close" title="إغلاق">✕</button></div>
+    <div class="g-body" id="gBody"></div>
+    <div class="g-nav"><button type="button" class="primary-btn ghost" id="gPrev">→ السابق</button><button type="button" class="primary-btn" id="gNext">التالي ←</button></div>
+  </form>
+</dialog>
+
+<dialog id="reportDialog">
+  <form method="dialog" class="dlg">
+    <div class="dlg-head"><h2>الإبلاغ عن خطأ</h2><button class="icon-btn" value="close" title="إغلاق">✕</button></div>
+    <div class="report-body">
+      <p>في: <b id="reportTitle"></b></p>
+      <textarea id="reportText" rows="5" placeholder="اكتب موضع الخطأ وصوابه، مثل: السطر الثالث «…» والصحيح «…»"></textarea>
+      <button class="primary-btn" id="reportSave">حفظ الملاحظة</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+<script src="mobile.js"></script>
+</body>
+</html>
