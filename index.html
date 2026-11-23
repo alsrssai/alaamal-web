@@ -28,17 +28,24 @@
     <select id="profileSel" class="profile-sel" hidden title="الفرد الحالي"></select>
     <button class="icon-btn print-btn" id="printPage" title="طباعة هذه الصفحة">🖨</button>
   </div>
-  <nav class="tabs" id="tabs">
-    <button data-tab="now" class="active">الآن</button>
-    <button data-tab="today">أعمال اليوم</button>
-    <button data-tab="daily">الأعمال اليومية</button>
-    <button data-tab="mine">أدعيتي</button>
-    <button data-tab="library">المكتبة</button>
-    <button data-tab="month">الشهر الهجري</button>
-    <button data-tab="events">المناسبات</button>
-    <button data-tab="stats">الإنجاز</button>
-    <button data-tab="settings">الإعدادات</button>
-  </nav>
+  <!-- التبويبات مرتبة حسب الاستعمال اليومي؛ وعلى الشاشات الضيقة تُسحب أفقيًا مع أسهم وتظليل يدلّان على المزيد -->
+  <div class="tabs-wrap" id="tabsWrap">
+    <button class="tabs-arrow start" id="tabsStart" aria-label="تبويبات سابقة" tabindex="-1">›</button>
+    <nav class="tabs" id="tabs">
+      <button data-tab="now" class="active">الآن</button>
+      <button data-tab="today">أعمال اليوم</button>
+      <button data-tab="daily">الأعمال اليومية</button>
+      <button data-tab="quran">القرآن</button>
+      <button data-tab="mine">أدعيتي</button>
+      <button data-tab="tools">الأدوات</button>
+      <button data-tab="month">الشهر الهجري</button>
+      <button data-tab="events">المناسبات</button>
+      <button data-tab="library">المكتبة</button>
+      <button data-tab="stats">الإنجاز</button>
+      <button data-tab="settings">الإعدادات</button>
+    </nav>
+    <button class="tabs-arrow end" id="tabsEnd" aria-label="تبويبات أخرى" tabindex="-1">‹</button>
+  </div>
   <div class="search-bar">
     <input id="search" type="search" placeholder="ابحث في الأعمال والأدعية والنصوص…" autocomplete="off">
   </div>
@@ -48,7 +55,9 @@
   <section id="tab-now" class="tab active"></section>
   <section id="tab-today" class="tab"></section>
   <section id="tab-daily" class="tab"></section>
+  <section id="tab-quran" class="tab"></section>
   <section id="tab-mine" class="tab"></section>
+  <section id="tab-tools" class="tab"></section>
   <section id="tab-library" class="tab"></section>
   <section id="tab-month" class="tab"></section>
   <section id="tab-events" class="tab"></section>
@@ -114,5 +123,6 @@
 
 <script src="app.js"></script>
 <script src="mobile.js"></script>
+<script src="extra.js"></script>
 </body>
 </html>

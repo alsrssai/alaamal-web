@@ -30,7 +30,7 @@ const DEFAULT_SETTINGS = {
   profiles: [{ id: "main", name: "أنا" }], activeProfile: "main", pdata: {},
   adhanSound: false, updateUrl: "",
 };
-const PER_PROFILE = ["favs", "wird", "lastRead", "qada", "readPos"];
+const PER_PROFILE = ["favs", "wird", "lastRead", "qada", "readPos", "quran", "tasbih"];
 const progressFile = () => (store.settings.activeProfile && store.settings.activeProfile !== "main" ? `progress-${store.settings.activeProfile}` : "progress");
 const store = {
   server: false,
@@ -417,7 +417,7 @@ function setTab(t) {
   renderTab();
 }
 function renderTab() {
-  ({ now: renderNow, today: renderToday, daily: renderDaily, mine: renderMine, library: renderLibrary, month: renderMonth, events: renderEvents, stats: renderStats, settings: renderSettings })[state.tab]();
+  ({ now: renderNow, today: renderToday, daily: renderDaily, quran: renderQuran, tools: renderTools, mine: renderMine, library: renderLibrary, month: renderMonth, events: renderEvents, stats: renderStats, settings: renderSettings })[state.tab]();
 }
 const saveSettings = () => store.save("settings");
 const isFav = (id) => (store.settings.favs || []).includes(id);

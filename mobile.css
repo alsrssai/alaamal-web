@@ -20,10 +20,10 @@ html.mobile, .mobile body { -webkit-tap-highlight-color: transparent; }
 .mobile .top { box-shadow: 0 1px 4px rgba(0, 0, 0, .12); }
 .mobile .date-nav { padding: 10px 12px 2px; gap: 8px; }
 .mobile .date-box { min-width: 0; flex: 1; }
-.mobile .hijri { font-size: 1.25em; }
+.mobile .hijri, .mobile .greg { font-size: 1.05em; }
 .mobile .chip { position: static; }
 /* شريط التبويبات أفقي قابل للسحب بدل عدة أسطر */
-.mobile .tabs { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; padding: 2px 8px 0; }
+.mobile .tabs { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; padding: 2px 30px 0; }
 .mobile .tabs::-webkit-scrollbar { display: none; }
 .mobile .tabs button { flex: none; padding: 9px 12px; }
 .mobile .search-bar { padding: 6px 12px 8px; }

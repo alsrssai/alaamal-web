@@ -1,7 +1,7 @@
 /* عامل الخدمة لتطبيق الويب (آيفون): يحفظ ملفات البرنامج في الجهاز ليعمل دون إنترنت.
    CACHE يتغيّر مع كل بناء فتُحدَّث الملفات تلقائيًا. */
-const CACHE = "alaamal-202611231853";
-const FILES = ["./", "index.html", "app.js", "styles.css", "mobile.js", "mobile.css", "data.json", "long-texts.json", "howto.json",
+const CACHE = "alaamal-202611231916";
+const FILES = ["./", "index.html", "app.js", "extra.js", "styles.css", "quran.json", "mobile.js", "mobile.css", "data.json", "long-texts.json", "howto.json",
   "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {

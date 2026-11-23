@@ -65,8 +65,8 @@ input, select { font: inherit; color: inherit; }
   position: relative;
 }
 .date-box { text-align: center; min-width: 260px; }
-.hijri { font-size: 1.55em; font-weight: 700; color: var(--accent); }
-.greg { color: var(--muted); font-size: .92em; }
+.hijri { font-size: 1.2em; font-weight: 700; color: var(--accent); line-height: 1.5; }
+.greg { font-size: 1.2em; font-weight: 600; color: var(--text); opacity: .75; line-height: 1.5; }
 .icon-btn {
   border: 1px solid var(--line); background: var(--surface-2);
   border-radius: 10px; width: 38px; height: 38px; font-size: 1.1em;
@@ -595,3 +595,87 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
 @media print { .guide-card, .hilal-bar, .profile-sel, .qada-row button { display: none !important; } }
 @media (max-width: 640px) { .profile-sel { position: static; } }
 .sec-head.num { font-size: .8em; }
+
+/* ---------- التبويبات: أسهم وتظليل يدلّان على المزيد ---------- */
+.tabs-wrap { position: relative; }
+.tabs-arrow {
+  display: none; position: absolute; top: 4px; bottom: 3px; z-index: 2; width: 30px;
+  border: none; background: var(--surface); color: var(--accent); font-size: 1.5em; font-weight: 700; line-height: 1; padding: 0;
+}
+.tabs-arrow.start { right: 0; box-shadow: -10px 0 12px -4px var(--surface); }
+.tabs-arrow.end { left: 0; box-shadow: 10px 0 12px -4px var(--surface); animation: nudge 1.6s ease-in-out 3; }
+.tabs-wrap.more-start .tabs-arrow.start, .tabs-wrap.more-end .tabs-arrow.end { display: block; }
+@keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-4px); } }
+.tabs-wrap.over .tabs { scroll-behavior: smooth; }
+@media (max-width: 760px) {
+  .tabs { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; padding-inline: 30px; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; }
+}
+
+/* ---------- القرآن ---------- */
+.q-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 18px; }
+.q-row .sp { flex: 1; }
+.q-row .seg button { padding: 4px 10px; }
+.muted { color: var(--muted); }
+.q-continue { background: linear-gradient(135deg, #1d6b52, #2b8a6a); }
+.q-find { width: 100%; box-sizing: border-box; border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; color: var(--text); font: inherit; }
+.q-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.q-surah { display: flex; flex-direction: column; align-items: flex-start; text-align: start; gap: 1px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; position: relative; }
+.q-surah:hover { border-color: var(--accent); }
+.q-surah[hidden] { display: none; }
+.q-surah b { font-family: var(--read-font, var(--text-font)); font-size: 1.25em; color: var(--accent); }
+.q-surah small { color: var(--muted); font-size: .78em; }
+.q-num { position: absolute; inset-inline-end: 10px; top: 8px; color: var(--gold); font-size: .8em; font-weight: 700; }
+.q-juz { display: flex; flex-wrap: wrap; gap: 6px; }
+.dlg-body.quran { text-align: justify; }
+.q-head { font-family: var(--ui-font); font-size: .5em; color: var(--muted); text-align: center; margin-bottom: 6px; }
+.q-basmala { text-align: center; color: var(--accent); margin: 4px 0 14px; font-size: 1.05em; }
+.qa { transition: background .3s; border-radius: 6px; }
+.qa.hl { background: var(--gold-soft); }
+.qn { color: var(--gold); font-size: .8em; white-space: nowrap; }
+.q-nav { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 20px; font-family: var(--ui-font); font-size: .55em; }
+.gift-form input { min-width: 160px; }
+.banner.tomorrow { background: var(--gold-soft); border-color: transparent; }
+
+/* ---------- المسبحة ---------- */
+.tb-big { display: flex; align-items: center; gap: 22px; padding: 10px 18px; flex-wrap: wrap; }
+.tb-btn.big { width: 150px; height: 150px; }
+.tb-btn.big b { font-size: 2.8em; }
+.tb-week { display: flex; align-items: flex-end; gap: 6px; height: 90px; padding: 6px 18px 0; }
+.tb-week .col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.tb-week .col i { display: block; width: 70%; background: var(--accent); border-radius: 4px 4px 0 0; }
+.tb-week .col span { font-size: .7em; color: var(--muted); }
+
+/* ---------- القبلة الحية ---------- */
+.ql { display: flex; align-items: center; gap: 22px; padding: 14px 18px; flex-wrap: wrap; }
+.ql-dial { position: relative; width: 190px; height: 190px; border-radius: 50%; border: 3px solid var(--line); background: var(--surface-2); flex: none; transition: border-color .2s, box-shadow .2s; }
+.ql-dial.ok { border-color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); }
+.ql-rose { position: absolute; inset: 0; transition: transform .15s linear; }
+.ql-rose span { position: absolute; font-weight: 700; color: var(--muted); font-size: .9em; }
+.ql-rose .n { top: 6px; left: 50%; transform: translateX(-50%); color: #c0392b; }
+.ql-rose .s { bottom: 6px; left: 50%; transform: translateX(-50%); }
+.ql-rose .e { right: 8px; top: 50%; transform: translateY(-50%); }
+.ql-rose .w { left: 8px; top: 50%; transform: translateY(-50%); }
+.ql-arrow { position: absolute; inset: 22px; display: flex; flex-direction: column; align-items: center; transition: transform .15s linear; font-size: 1.6em; }
+.ql-arrow i { width: 4px; flex: 1; margin-top: 2px; border-radius: 4px; background: linear-gradient(var(--accent), transparent); }
+.ql-info { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+.ql-info b { font-size: 1.15em; color: var(--accent); }
+.ql-info small { color: var(--muted); }
+
+/* ---------- محوّل التاريخ ---------- */
+.conv-row { padding: 10px 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.conv-row:first-child { border-top: none; }
+.conv-in { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.conv input, .conv select { border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px; padding: 5px 8px; color: var(--text); font: inherit; }
+.conv input[type="number"] { width: 80px; }
+.conv-out { font-weight: 700; color: var(--accent); font-size: 1.1em; }
+
+/* ---------- وضع كبار السن ---------- */
+.senior .check { width: 34px; height: 34px; font-size: 18px; }
+.senior .read-btn, .senior .primary-btn, .senior .fchip { padding: 8px 16px; font-size: 1em; }
+.senior details.more, .senior .item-src, .senior .src-chip, .senior .search-filters, .senior .print-btn { display: none !important; }
+.senior .tabs button[hidden] { display: none; }
+.senior .tabs button { padding: 12px 16px; font-size: 1.05em; }
+.senior .item-title { font-size: 1.08em; }
+.senior .star { font-size: 1.6em; }
