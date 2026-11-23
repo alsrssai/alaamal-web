@@ -25,7 +25,7 @@ const DEFAULT_SETTINGS = {
   // أدعيتي: المفضلة، والورد اليومي، وآخر ما قُرئ
   favs: [], wird: [], lastRead: [],
   // ثبوت الهلال لكل شهر {"1448-9": "2027-02-08"}، ومناسباتي، وقضاء الفوائت، وموضع القراءة
-  monthStarts: {}, personal: [], qada: {}, readPos: {}, imsakMinutes: 10,
+  monthStarts: {}, personal: [], qada: {}, readPos: {}, imsakMinutes: 10, clockFormat: 12,
   // أفراد العائلة: لكل فرد إنجازه ووِرده ومفضلته
   profiles: [{ id: "main", name: "أنا" }], activeProfile: "main", pdata: {},
   adhanSound: false, updateUrl: "",
@@ -270,7 +270,13 @@ function prayerTimes(d, city = store.settings.city) {
   return out;
 }
 const PRAYER_NAMES = { fajr: "أذان الفجر", sunrise: "الشروق", dhuhr: "أذان الظهر", maghrib: "أذان المغرب", midnight: "منتصف الليل" };
-const hm = (dt) => { const p = tzParts(dt); return ar(`${p.hour}:${String(p.minute).padStart(2, "0")}`); };
+/** الوقت حسب اختيار المستخدم: ١٢ ساعة (ص/م) أو ٢٤ ساعة */
+function fmtHM(h, m) {
+  const mm = String(m).padStart(2, "0");
+  if (Number(store.settings.clockFormat) === 24) return ar(`${h}:${mm}`);
+  return ar(`${h % 12 || 12}:${mm}`) + (h < 12 ? " ص" : " م");
+}
+const hm = (dt) => { const p = tzParts(dt); return fmtHM(p.hour, p.minute); };
 function hms(ms) {
   const s = Math.max(0, Math.floor(ms / 1000));
   const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
@@ -647,7 +653,7 @@ function renderNow() {
   } else {
     const p = PERIODS[cp.key];
     const T = cp.times;
-    const chips = [["fajr", "الفجر"], ["sunrise", "الشروق"], ["dhuhr", "الظهر"], ["maghrib", "المغرب"], ["midnight", "منتصف الليل"]]
+    const chips = [["fajr", "الفجر"], ["sunrise", "الشروق"], ["dhuhr", "الظهر"], ["maghrib", "المغرب"], ["midnight", "نصف الليل"]]
       .map(([k, n]) => `<div class="pt ${cp.next.key === k && sameDay(cp.next.at, T[k]) ? "next" : ""}"><small>${n}</small><b>${hm(T[k])}</b></div>`).join("");
     html += `<div class="now-hero p-${cp.key}">
       <div class="now-top"><div><div class="now-period">${p.icon} ${p.name}</div><div class="now-sub">${p.sub} · ${esc(store.settings.city.name)}</div></div>
@@ -1137,7 +1143,8 @@ function renderSettings() {
   const srv = store.server;
   let html = `<div class="group"><div class="group-head"><span class="ico">🎨</span><h3>المظهر</h3></div>
     <div class="set-row"><div class="lbl"><b>السمة</b></div>${seg("theme", [["light", "فاتح"], ["dark", "داكن"], ["auto", "حسب النظام"]], s.theme)}</div>
-    <div class="set-row"><div class="lbl"><b>حجم الخط</b></div>${seg("fontScale", [[0.9, "صغير"], [1, "متوسط"], [1.15, "كبير"], [1.3, "أكبر"]], s.fontScale)}</div></div>`;
+    <div class="set-row"><div class="lbl"><b>حجم الخط</b></div>${seg("fontScale", [[0.9, "صغير"], [1, "متوسط"], [1.15, "كبير"], [1.3, "أكبر"]], s.fontScale)}</div>
+    <div class="set-row"><div class="lbl"><b>نظام الساعة</b><small>لأوقات الصلاة والساعة والتنبيهات</small></div>${seg("clockFormat", [[12, "١٢ ساعة (ص/م)"], [24, "٢٤ ساعة"]], s.clockFormat ?? 12)}</div></div>`;
   html += `<div class="group"><div class="group-head"><span class="ico">🌙</span><h3>التقويم الهجري</h3></div>
     <div class="set-row"><div class="lbl"><b>تعديل التاريخ الهجري</b><small>اليوم حسب الإعداد الحالي: ${hijriText(h)}</small></div>
     ${seg("hijriOffset", [[-2, "−٢"], [-1, "−١"], [0, "أم القرى"], [1, "+١"], [2, "+٢"]], s.hijriOffset)}</div></div>`;
@@ -1159,7 +1166,7 @@ function renderSettings() {
     <div class="set-row"><div class="lbl"><b>تنبيه بأعمال اليوم</b><small>إشعار من ويندوز بالمناسبة وأعمال اليوم</small></div>${switchHTML("notify", s.notify, !srv)}</div>
     <div class="set-row"><div class="lbl"><b>وقت تنبيه الصباح</b><small>أعمال اليوم ومناسبته</small></div><input type="time" data-time="morningTime" value="${esc(s.morningTime)}" ${!srv || !s.notify ? "disabled" : ""}></div>
     <div class="set-row"><div class="lbl"><b>وقت تنبيه المساء</b><small>أعمال الليلة (ليلة الجمعة، ليالي المناسبات)</small></div><input type="time" data-time="eveningTime" value="${esc(s.eveningTime)}" ${!srv || !s.notify ? "disabled" : ""}></div>
-    ${srv ? "" : `<p class="note" style="padding:0 18px 12px">التنبيهات متاحة عند تشغيل البرنامج من ملف «الأعمال المستحبة.exe».</p>`}</div>`;
+    ${srv ? "" : `<p class="note" style="padding:0 18px 12px">التنبيهات متاحة عند تشغيل البرنامج من ملف «الغياث.exe».</p>`}</div>`;
   html += `<div class="group"><div class="group-head"><span class="ico">💾</span><h3>البيانات</h3></div>
     <div class="set-row"><div class="lbl"><b>نسخة احتياطية من سجل الإنجاز</b><small>${srv ? "يُحفظ السجل تلقائياً في مجلد البرنامج (data)" : "يُحفظ السجل في هذا المتصفح"}</small></div>
     <div style="display:flex;gap:8px"><button class="read-btn" id="exportBtn">تصدير</button><button class="read-btn" id="importBtn">استيراد</button>
@@ -1556,7 +1563,7 @@ function bindReadTools() {
 /* ---------- الطباعة ---------- */
 function printHeader() {
   const d = state.date;
-  return `<div class="print-head"><b>الأعمال المستحبة</b><span>${hijriText(hijri(d))} — ${WEEKDAYS[d.getDay()]} ${gregText(d)}</span></div>`;
+  return `<div class="print-head"><b>الغياث</b><span>${hijriText(hijri(d))} — ${WEEKDAYS[d.getDay()]} ${gregText(d)}</span></div>`;
 }
 /** طباعة الدعاء المفتوح: العنوان وطريقة الأداء والنص والمصدر */
 function printText() {
@@ -1620,7 +1627,7 @@ function exportImage() {
   ctx.fillStyle = "#6b726c"; ctx.font = `26px "Segoe UI", Tahoma, sans-serif`;
   y += 40;
   if (dlgState.src) ctx.fillText(dlgState.src.slice(0, 70), W / 2, y);
-  ctx.fillText("من برنامج «الأعمال المستحبة»", W / 2, y + 38);
+  ctx.fillText("من برنامج «الغياث»", W / 2, y + 38);
   const a = document.createElement("a");
   a.href = c.toDataURL("image/png");
   a.download = `${stripDiac(dlgState.title).replace(/[\\/:*?"<>|«»]/g, "").slice(0, 50)}.png`;
@@ -1726,7 +1733,7 @@ async function main() {
     DATA = await (await fetch("data.json", { cache: "no-store" })).json();
     try { HOWTO = await (await fetch("howto.json", { cache: "no-store" })).json(); } catch (e) { /* اختياري */ }
   } catch (e) {
-    document.body.innerHTML = `<p style="padding:40px;text-align:center">تعذّر تحميل ملف المحتوى data.json.<br>شغّل البرنامج من ملف «الأعمال المستحبة.exe».</p>`;
+    document.body.innerHTML = `<p style="padding:40px;text-align:center">تعذّر تحميل ملف المحتوى data.json.<br>شغّل البرنامج من ملف «الغياث.exe».</p>`;
     return;
   }
 

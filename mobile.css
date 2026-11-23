@@ -34,7 +34,11 @@ html.mobile, .mobile body { -webkit-tap-highlight-color: transparent; }
 .mobile .star { font-size: 1.4em; }
 .mobile .group-head { padding: 10px 12px; }
 .mobile .now-hero { padding: 16px; }
-.mobile .ptimes { grid-template-columns: repeat(3, 1fr); }
+/* أوقات الصلاة الخمسة في سطر واحد */
+.mobile .ptimes { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.mobile .pt { padding: 5px 1px; border-radius: 9px; }
+.mobile .pt small { font-size: .7em; white-space: nowrap; }
+.mobile .pt b { font-size: .82em; white-space: nowrap; letter-spacing: -.2px; }
 .mobile .now-clock { font-size: 1.7em; }
 .mobile .profile-sel { position: static; }
 /* النوافذ بملء الشاشة */
