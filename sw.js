@@ -1,6 +1,6 @@
 /* عامل الخدمة لتطبيق الويب (آيفون): يحفظ ملفات البرنامج في الجهاز ليعمل دون إنترنت.
    CACHE يتغيّر مع كل بناء فتُحدَّث الملفات تلقائيًا. */
-const CACHE = "alaamal-202611241738";
+const CACHE = "alaamal-202611241739";
 const FILES = ["./", "index.html", "app.js", "extra.js", "styles.css", "quran.json", "zahra.json", "mobile.js", "mobile.css", "data.json", "long-texts.json", "howto.json",
   "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 
