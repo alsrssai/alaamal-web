@@ -679,3 +679,14 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
 .senior .tabs button { padding: 12px 16px; font-size: 1.05em; }
 .senior .item-title { font-size: 1.08em; }
 .senior .star { font-size: 1.6em; }
+
+/* ---------- تقويم الزهراء ---------- */
+.zahra-card .group-head small { font-weight: 400; color: var(--muted); font-size: .8em; }
+.zahra-list { margin: 0; padding: 10px 36px 12px 18px; line-height: 2; }
+.zahra-list li.major { font-weight: 700; color: var(--accent); }
+.zahra-line {
+  display: block; width: 100%; text-align: start; margin: 0 0 14px; padding: 9px 14px; border-radius: 12px;
+  background: var(--surface); border: 1px dashed var(--gold); color: var(--text); font-size: .92em;
+}
+.zahra-line span { color: var(--gold); float: left; }
+.cell.has-zahra .hd::after { content: "•"; color: var(--gold); margin-inline-start: 3px; }

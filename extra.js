@@ -452,6 +452,82 @@ renderNow = function () {
   if (hero) hero.insertAdjacentHTML("afterend", html); else $("#tab-now").insertAdjacentHTML("afterbegin", html);
 };
 
+/* ====================== تقويم الزهراء عليها السلام (بجانب التقويم الحالي) ====================== */
+// المناسبات الكبرى التي ليست في تقويمنا تُضاف إلى مناسبات اليوم (مع ذكر المصدر)،
+// وبقية الأحداث تظهر في بطاقة «في مثل هذا اليوم».
+let ZCAL = null;
+fetch("zahra.json").then((r) => r.json()).then((z) => { ZCAL = z; if (DATA) { renderTab(); } }).catch(() => { /* اختياري */ });
+const zahraOn = () => ZCAL && store.settings.showZahra !== false;
+const zahraDay = (d) => { if (!zahraOn()) return []; const h = hijri(d); return ZCAL.days[`${h.m}-${h.d}`] || []; };
+const ZSTOP = new Set(["الامام", "الإمام", "السيدة", "السيد", "النبي", "نبي", "الله", "الرسول", "عليه", "عليها", "السلام", "بن", "بنت", "ابن", "في", "من", "الى", "إلى", "مولد", "ميلاد", "ولادة", "وفاة", "شهادة", "استشهاد", "الأعظم", "سيدنا", "مولانا"]);
+const zTokens = (t) => unify(stripDiac(t)).replace(/\([^)]*\)|[0-9٠-٩]+|هـ/g, " ").split(/[\s،,./-]+/).filter((w) => w.length >= 3 && !ZSTOP.has(w));
+/** هل الحدث مذكور أصلًا في مناسبات اليوم؟ (اسم مشترك مثل «الحسين» أو «الزهراء») */
+function zCovered(t, list) {
+  const real = list.filter((e) => e.kind !== "plain" && !e.zahra);
+  let ours = unify(stripDiac(real.map((e) => e.title).join(" "))).replace(/\s+/g, "");
+  // أسماء مترادفة للمعصومين عليهم السلام
+  for (const [a, b] of [["المنتظر", "المهدي"], ["الحجه", "المهدي"], ["القايم", "المهدي"], ["السجاد", "العابدين"], ["اميرالمومنين", "علي"], ["المجتبي", "الحسن"], ["الجواد", "التقي"], ["الهادي", "النقي"], ["العسكري", "الحسنبنعلي"], ["الرسول", "النبي"]]) {
+    if (ours.includes(b)) ours += a;
+    if (ours.includes(a)) ours += b;
+  }
+  const toks = zTokens(t).map((w) => w.replace(/\s+/g, ""));
+  // بلا اسم مميز (مثل «مولد الرسول (ص)»): يكفي أن في اليوم مناسبة من النوع نفسه
+  if (!toks.length) {
+    const birth = /^(مولد|ميلاد|ولادة)/.test(t);
+    return real.some((e) => (birth ? /مولد|ميلاد|ولادة/ : /وفاة|شهادة|استشهاد/).test(e.title));
+  }
+  return toks.some((w) => ours.includes(w));
+}
+const _eventsFor = eventsFor;
+eventsFor = function (d) {
+  const list = _eventsFor(d);
+  const zs = zahraDay(d).filter((z) => z.m);
+  if (!zs.length) return list;
+  // تقويم الزهراء قد يختلف عنا بيوم: نعدّ الحدث مذكورًا إن ورد في اليوم نفسه أو قبله أو بعده
+  const near = [...list, ..._eventsFor(addDays(d, -1)), ..._eventsFor(addDays(d, 1))];
+  for (const z of zs) {
+    if (zCovered(z.t, near)) continue;
+    const kind = /^(مولد|ميلاد|ولادة)/.test(z.t) ? "mawlid" : "wafat";
+    list.push({ title: z.t, kind, items: [], night: [], zahra: true, note: "من تقويم الزهراء عليها السلام" });
+  }
+  return list;
+};
+function zahraCardHTML(d) {
+  const all = zahraDay(d);
+  if (!all.length) return "";
+  return `<details class="group fold zahra-card" data-key="grp:zahra" ${openSet.has("grp:zahra") ? "open" : ""}><summary class="group-head"><span class="ico">📜</span>
+    <h3>في مثل هذا اليوم <small>(من تقويم الزهراء عليها السلام)</small></h3><span class="count">${ar(all.length)}</span><span class="chev">▾</span></summary>
+    <ul class="zahra-list">${all.map((z) => `<li class="${z.m ? "major" : ""}">${esc(z.t)}</li>`).join("")}</ul></details>`;
+}
+const _renderToday = renderToday;
+renderToday = function () {
+  _renderToday();
+  const html = zahraCardHTML(state.date);
+  if (!html) return;
+  const sec = $("#tab-today"), pw = sec.querySelector(".progress-wrap");
+  if (pw) pw.insertAdjacentHTML("afterend", html); else sec.insertAdjacentHTML("afterbegin", html);
+  bindDetails(sec);
+};
+const _renderNowZ = renderNow;
+renderNow = function () {
+  _renderNowZ();
+  const minor = zahraDay(today()).filter((z) => !z.m).slice(0, 2);
+  if (!minor.length) return;
+  const sec = $("#tab-now"), anchor = sec.querySelector(".now-hero") || sec.firstElementChild;
+  const line = `<button class="zahra-line" data-goto="today" data-open="grp:zahra">📜 في مثل هذا اليوم: ${minor.map((z) => esc(z.t)).join(" · ")} <span>←</span></button>`;
+  if (anchor) anchor.insertAdjacentHTML("afterend", line); else sec.insertAdjacentHTML("afterbegin", line);
+};
+const _renderMonth = renderMonth;
+renderMonth = function () {
+  _renderMonth();
+  if (!zahraOn()) return;
+  // تلميح على كل يوم بأحداثه في تقويم الزهراء
+  $("#tab-month").querySelectorAll(".cell[data-date]").forEach((c) => {
+    const z = zahraDay(new Date(c.dataset.date + "T12:00"));
+    if (z.length) { c.title = "من تقويم الزهراء:\n" + z.map((x) => "• " + x.t).join("\n"); c.classList.add("has-zahra"); }
+  });
+};
+
 /* ====================== وضع كبار السن ====================== */
 const _applyLook = applyLook;
 applyLook = function () {
@@ -472,7 +548,8 @@ renderSettings = function () {
   const sw = (name, on) => `<label class="switch"><input type="checkbox" data-sw2="${name}" ${on ? "checked" : ""}><span></span></label>`;
   let html = `<div class="group"><div class="group-head"><span class="ico">🤝</span><h3>تسهيلات</h3></div>
     <div class="set-row"><div class="lbl"><b>وضع كبار السن</b><small>خط كبير، وأزرار أكبر، وإخفاء الإضافات والتبويبات الأقل استعمالًا</small></div>${sw("senior", s.senior)}</div>
-    <div class="set-row"><div class="lbl"><b>التذكير بالمناسبات قبلها بيوم</b><small>في «الآن»، وفي تنبيه المساء</small></div>${sw("remindDayBefore", s.remindDayBefore !== false)}</div></div>`;
+    <div class="set-row"><div class="lbl"><b>التذكير بالمناسبات قبلها بيوم</b><small>في «الآن»، وفي تنبيه المساء</small></div>${sw("remindDayBefore", s.remindDayBefore !== false)}</div>
+    <div class="set-row"><div class="lbl"><b>أحداث تقويم الزهراء عليها السلام</b><small>المناسبات الكبرى غير الموجودة في تقويمنا، وبطاقة «في مثل هذا اليوم»${ZCAL ? ` (${esc(ZCAL.years)})` : ""}</small></div>${sw("showZahra", s.showZahra !== false)}</div></div>`;
   if (MOBILE_NOTIFY()) {
     html += `<div class="group"><div class="group-head"><span class="ico">🔔</span><h3>تنبيهات الهاتف</h3></div>
       <div class="set-row"><div class="lbl"><b>تنبيه قبل الأذان</b><small>الفجر والظهر والمغرب مع أعمال الوقت (المدة من «أوقات الصلاة»)</small></div>${sw("prayerNotify", s.prayerNotify !== false)}</div>
