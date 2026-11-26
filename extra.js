@@ -225,7 +225,7 @@ async function shareText(text) {
 }
 
 /* ---------- قارئ المصحف (في نافذة النص نفسها بأدوات القراءة) ---------- */
-async function openQuran(s, a = 1) {
+async function openQuran(s, a = 1, track = true) {
   await loadQuran();
   s = Math.min(114, Math.max(1, s));
   const su = QURAN.s[s - 1];
@@ -257,11 +257,12 @@ async function openQuran(s, a = 1) {
     qs().last = { s, a: cur }; saveSettings();
   };
   body.onscroll = () => { clearTimeout(tmr); tmr = setTimeout(save, 700); };
-  save();
+  if (track) save();
+  else body.onscroll = null; // فُتحت من عمل يومي: لا تغيّر موضع «تابع القراءة»
 }
 document.addEventListener("click", (e) => {
   const o = e.target.closest("[data-qopen]");
-  if (o) { const [s, a] = o.dataset.qopen.split(":").map(Number); openQuran(s, a); return; }
+  if (o) { const [s, a] = o.dataset.qopen.split(":").map(Number); openQuran(s, a, !o.classList.contains("q-link")); return; }
   const p = e.target.closest("[data-qpage]");
   if (p) { loadQuran().then(() => { const st = pageStart(+p.dataset.qpage); openQuran(st.s, st.a); }); return; }
   const j = e.target.closest("[data-qjuz]");

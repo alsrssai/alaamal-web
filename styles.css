@@ -690,3 +690,8 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
 }
 .zahra-line span { color: var(--gold); float: left; }
 .cell.has-zahra .hd::after { content: "•"; color: var(--gold); margin-inline-start: 3px; }
+
+/* أزرار السور داخل العمل */
+.q-links { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+.q-link { border: 1px solid var(--line); background: none; color: var(--accent); border-radius: 999px; padding: 2px 10px; font-size: .85em; cursor: pointer; font-family: inherit; }
+.q-link:hover { border-color: var(--accent); }

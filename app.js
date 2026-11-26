@@ -468,7 +468,12 @@ function itemHTML(it, d, checkable = true, opts = {}) {
   return `<div class="item ${done ? "done" : ""}${inWird ? " in-wird" : ""}">${chk}
     <div class="item-main"><div class="item-title">${esc(it.title)}${badge}</div>
     ${it.desc ? `<div class="item-desc">${esc(it.desc)}</div>` : ""}
-    ${howHTML(it)}${srcHTML(it.src)}</div>${wird}${guide}${read}${star}</div>`;
+    ${surahHTML(it)}${howHTML(it)}${srcHTML(it.src)}</div>${wird}${guide}${read}${star}</div>`;
+}
+/** أزرار السور المذكورة في العمل: تفتح السورة (أو الآية) في المصحف */
+function surahHTML(it) {
+  if (!it.q || !it.q.length) return "";
+  return `<div class="q-links">${it.q.map((x) => `<button type="button" class="q-link" data-qopen="${x.s}:${x.a || 1}">📖 ${esc(x.a ? x.n : `سورة ${x.n}`)}</button>`).join("")}</div>`;
 }
 /** خلاصة طريقة الأداء تحت العمل: الخطوة الأولى ظاهرة، والبقية عند الفتح */
 let HOWTO = {};
@@ -512,6 +517,7 @@ const KINDS = [
   ["dua", "🤲 الأدعية والأذكار", /دعاء|يدعو|ادع|الدعاء|مناجاة|تعويذ|عوذة|حرز|تسبيح|التسبيح|يسبح|ذكر|يقول|تقول|قل|استغفار|يستغفر|الصلاة على|الصلوات على|تهليل|التهليل|قراءة|يقرأ|سورة/],
 ];
 function kindOf(it) {
+  if (it.q && it.q.length && !isExtraId(it.id)) return "quran";
   const t = stripDiac(it.title);
   for (const [k, , re] of KINDS) if (re.test(t)) return k;
   return "other";
@@ -533,10 +539,10 @@ function renderToday() {
   if (!dayGroups.length) html += `<p class="search-info">لا أعمال خاصة بهذا اليوم. انظر تبويب «الأعمال اليومية».</p>`;
   for (const g of dayGroups) {
     const dn = g.items.filter((it) => store.isDone(d, it.id)).length;
-    const sections = [...KINDS.map(([k, label]) => [k, label]), ["other", "📌 أعمال أخرى"]];
+    const sections = [["quran", "📖 السور وتلاوة القرآن"], ...KINDS.map(([k, label]) => [k, label]), ["other", "📌 أعمال أخرى"]];
     // يعرض قائمة مقسّمة إلى صلوات وزيارات وأدعية وأعمال أخرى
     const byKind = (list) => {
-      const parts = { salat: [], ziyara: [], dua: [], other: [] };
+      const parts = { quran: [], salat: [], ziyara: [], dua: [], other: [] };
       for (const it of list) parts[kindOf(it)].push(it);
       const nonEmpty = sections.filter(([k]) => parts[k].length);
       return nonEmpty.map(([k, label]) => (nonEmpty.length > 1 ? `<div class="kind-head">${label} <small>(${ar(parts[k].length)})</small></div>` : "")
@@ -696,6 +702,9 @@ function renderNow() {
   const special = [];
   for (const g of groups.filter((g) => !g.common && g.key !== "night")) for (const it of g.items) if (!isExtraId(it.id)) special.push(it);
   if (special.length) {
+    // ما وقته الآن أولًا (كدعاء السمات عصر الجمعة)، وما فات وقته أو لم يأتِ آخرًا
+    const rank = (it) => (!it.when ? 1 : cp && it.when === cp.key ? 0 : 2);
+    special.sort((a, b) => rank(a) - rank(b));
     const left = special.filter((it) => !store.isDone(d, it.id));
     html += `<div class="group occasion"><div class="group-head"><span class="ico">⭐</span><h3>من أعمال اليوم الخاصة</h3>
       <button class="link-btn" data-goto="today">عرضها كلها (${ar(special.length)}) ←</button></div>
@@ -1687,7 +1696,7 @@ function renderSearch(q) {
   const textOnly = new Set(inText);
   const passes = (e) => (searchFilter.kind === "all" || kindOf(e.it) === searchFilter.kind) && (!searchFilter.book || booksOf(e.it.src).includes(searchFilter.book));
   const all = [...exact, ...inTitle, ...inText].filter(passes);
-  const filters = `<div class="search-filters">${[["all", "الكل"], ["salat", "🕌 صلوات"], ["dua", "🤲 أدعية وأذكار"], ["ziyara", "🕋 زيارات"], ["other", "📌 أخرى"]]
+  const filters = `<div class="search-filters">${[["all", "الكل"], ["salat", "🕌 صلوات"], ["dua", "🤲 أدعية وأذكار"], ["ziyara", "🕋 زيارات"], ["quran", "📖 سور"], ["other", "📌 أخرى"]]
     .map(([k, n]) => `<button class="fchip ${searchFilter.kind === k ? "on" : ""}" data-fkind="${k}">${n}</button>`).join("")}
     <select id="fBook"><option value="">كل الكتب</option>${BOOKS.map(([, n]) => `<option ${searchFilter.book === n ? "selected" : ""}>${n}</option>`).join("")}</select></div>`;
   const MAX = 150;
