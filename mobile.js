@@ -30,7 +30,7 @@ function addTrialBadge() {
   b.className = "trial-badge";
   b.textContent = "نسخة تجريبية";
   b.onclick = showTrial;
-  document.querySelector(".date-nav").appendChild(b);
+  (document.querySelector(".date-box") || document.querySelector(".date-nav")).appendChild(b);
 }
 function showTrial() {
   let d = document.querySelector("#trialDialog");
@@ -70,12 +70,59 @@ function installHint() {
   document.body.appendChild(h);
 }
 
+// شريط التبويبات السفلي (على نسق «الأربعينية الحسينية»): أربعة أقسام رئيسية و«المزيد» لبقية الأقسام
+const BNAV_MAIN = ["now", "today", "daily", "quran"];
+const BNAV_SHORT = { today: "اليوم", daily: "اليومية" };
+const tabParts = (b) => { const ic = b.querySelector("i")?.textContent || ""; return { ic, tx: b.textContent.replace(ic, "").trim() }; };
+function goTab(t) { $("#search").value = ""; setTab(t); window.scrollTo(0, 0); }
+function buildBottomNav() {
+  if ($("#bnav")) return;
+  const nav = document.createElement("nav");
+  nav.id = "bnav"; nav.className = "bnav";
+  nav.innerHTML = BNAV_MAIN.map((t) => {
+    const p = tabParts(document.querySelector(`#tabs button[data-tab="${t}"]`));
+    return `<button type="button" data-bt="${t}"><i>${p.ic}</i>${BNAV_SHORT[t] || p.tx}</button>`;
+  }).join("") + `<button type="button" data-bt="more"><i>☰</i>المزيد</button>`;
+  nav.onclick = (e) => {
+    const b = e.target.closest("[data-bt]");
+    if (!b) return;
+    if (b.dataset.bt === "more") openMore(); else goTab(b.dataset.bt);
+  };
+  document.body.appendChild(nav);
+  syncBnav();
+}
+function openMore() {
+  let d = $("#moreSheet");
+  if (!d) {
+    d = document.createElement("dialog");
+    d.id = "moreSheet";
+    d.addEventListener("click", (e) => {
+      if (e.target === d || e.target.closest(".sheet-close")) { d.close(); return; }
+      const b = e.target.closest("[data-mt]");
+      if (b) { d.close(); goTab(b.dataset.mt); }
+    });
+    document.body.appendChild(d);
+  }
+  const items = [...document.querySelectorAll("#tabs button")].filter((b) => !BNAV_MAIN.includes(b.dataset.tab) && !b.hidden);
+  d.innerHTML = `<div class="sheet-head"><b>المزيد</b><button type="button" class="icon-btn sheet-close" aria-label="إغلاق">✕</button></div>
+    <div class="more-grid">${items.map((b) => { const p = tabParts(b); return `<button type="button" data-mt="${b.dataset.tab}" class="${state.tab === b.dataset.tab ? "on" : ""}"><i>${p.ic}</i><span>${esc(p.tx)}</span></button>`; }).join("")}</div>`;
+  d.showModal();
+}
+function syncBnav() {
+  const nav = $("#bnav");
+  if (!nav) return;
+  nav.querySelectorAll("[data-bt]").forEach((b) => b.classList.toggle("active", b.dataset.bt === state.tab || (b.dataset.bt === "more" && !BNAV_MAIN.includes(state.tab))));
+}
+const _setTabMobile = setTab;
+setTab = function (t) { _setTabMobile(t); syncBnav(); };
+
 function initMobile() {
   // العمل دون إنترنت (تطبيق الويب): عامل الخدمة يحفظ الملفات في ذاكرة الجهاز
   if (!IS_ANDROID_APP && !IS_IOS_APP && "serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
     navigator.serviceWorker.register("sw.js").catch(() => { /* يعمل بدونه */ });
   }
   addTrialBadge();
+  buildBottomNav();
   let seen = false;
   try { seen = localStorage.getItem("trialSeen") === "1"; localStorage.setItem("trialSeen", "1"); } catch (e) { /* تجاهل */ }
   if (!seen) setTimeout(showTrial, 600); else installHint();

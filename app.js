@@ -18,7 +18,7 @@ function gregText(d) { return `${ar(d.getDate())} ${GREG_MONTHS[d.getMonth()]} $
 
 /* ====================== التخزين ====================== */
 const DEFAULT_SETTINGS = {
-  theme: "auto", fontScale: 1, hijriOffset: 0,
+  theme: "dark", fontScale: 1, hijriOffset: 0,
   notify: true, morningTime: "07:00", eveningTime: "18:30", autostart: false,
   // أوقات الصلاة: المدينة {name, lat, lng}، والتنبيه قبل الأذان بعدد دقائق
   city: null, prayerNotify: true, prayerBefore: 10,
@@ -473,7 +473,7 @@ function itemHTML(it, d, checkable = true, opts = {}) {
 /** أزرار السور المذكورة في العمل: تفتح السورة (أو الآية) في المصحف */
 function surahHTML(it) {
   if (!it.q || !it.q.length) return "";
-  return `<div class="q-links">${it.q.map((x) => `<button type="button" class="q-link" data-qopen="${x.s}:${x.a || 1}">📖 ${esc(x.a ? x.n : `سورة ${x.n}`)}</button>`).join("")}</div>`;
+  return `<div class="q-links">${it.q.map((x) => `<button type="button" class="q-link" data-qopen="${x.s}:${x.a || 1}">📖 ${esc(x.a || it.q.length > 1 ? x.n : `سورة ${x.n}`)}</button>`).join("")}</div>`;
 }
 /** خلاصة طريقة الأداء تحت العمل: الخطوة الأولى ظاهرة، والبقية عند الفتح */
 let HOWTO = {};
@@ -1333,6 +1333,8 @@ async function runUpdate() {
 const darkMQ = window.matchMedia("(prefers-color-scheme: dark)");
 function applyLook() {
   const s = store.settings;
+  // الهوية الجديدة (عنابي وذهبي): الداكن افتراضي مرة واحدة لمن كان على «حسب النظام»، ويبقى اختياره بعدها
+  if (!s.lookV2) { s.lookV2 = 1; if (s.theme === "auto") s.theme = "dark"; saveSettings(); }
   const theme = s.theme === "auto" ? (darkMQ.matches ? "dark" : "light") : s.theme;
   document.documentElement.dataset.theme = theme;
   document.documentElement.style.setProperty("--fs", s.fontScale || 1);

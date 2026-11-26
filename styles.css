@@ -1,42 +1,56 @@
 :root {
-  --bg: #f6f3ec;
-  --surface: #ffffff;
-  --surface-2: #efeadf;
-  --text: #1f2a24;
-  --muted: #6b726c;
-  --line: #e2dccd;
-  --accent: #1d6b52;
-  --accent-soft: #dcefe6;
+  /* الفاتح: كريمي وعنابي وذهبي */
+  --bg: #f7f0e4;
+  --bg-grad: radial-gradient(ellipse at top, #fdf7ec 0%, #f3e9d8 70%);
+  --surface: #fffaf2;
+  --surface-2: #f3e7d5;
+  --text: #2a1414;
+  --muted: #7a6458;
+  --line: #e6d4bd;
+  --accent: #8b1e1e;
+  --accent-soft: #f6e0da;
+  --on-accent: #fff8ec;
   --gold: #a8792a;
   --gold-soft: #f6ead2;
-  --wafat: #4a4f57;
-  --wafat-soft: #e7e8ea;
-  --mawlid: #1d6b52;
+  --red: #9b1c1c;
+  --wafat: #5a4a46;
+  --wafat-soft: #ece3dc;
+  --mawlid: #2f7a45;
   --eid: #a8792a;
-  --done: #1d6b52;
-  --shadow: 0 1px 2px rgba(30, 40, 30, .06), 0 4px 14px rgba(30, 40, 30, .05);
+  --done: #2f7a45;
+  --head-bg: rgba(139, 30, 30, .06);
+  --top-bg: rgba(255, 250, 242, .92);
+  --hero: linear-gradient(135deg, #7f1d1d, #3a1010);
+  --shadow: 0 1px 2px rgba(60, 20, 20, .06), 0 4px 14px rgba(60, 20, 20, .06);
   --fs: 1;
-  --ui-font: "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif;
-  --text-font: "Traditional Arabic", "Amiri", "Sakkal Majalla", "Arabic Typesetting", serif;
+  --ui-font: "Noto Kufi Arabic", "Segoe UI", Tahoma, sans-serif;
+  --text-font: "Amiri", "Traditional Arabic", "Sakkal Majalla", serif;
   color-scheme: light;
 }
 :root[data-theme="dark"] {
-  --bg: #121614;
-  --surface: #1b211e;
-  --surface-2: #232a26;
-  --text: #e8ebe6;
-  --muted: #9aa39c;
-  --line: #2e3631;
-  --accent: #5cc39b;
-  --accent-soft: #1d3a2f;
-  --gold: #d8ad5f;
-  --gold-soft: #3a2f1c;
-  --wafat: #b7bcc4;
-  --wafat-soft: #2a2e33;
-  --mawlid: #5cc39b;
-  --eid: #d8ad5f;
-  --done: #5cc39b;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+  /* الداكن (الافتراضي): عنابي وذهبي */
+  --bg: #140a0a;
+  --bg-grad: radial-gradient(ellipse at top, #2a1212 0%, #140a0a 60%);
+  --surface: #261515;
+  --surface-2: #1f1111;
+  --text: #f3e9dc;
+  --muted: #b8a596;
+  --line: #3d2222;
+  --accent: #d4a64a;
+  --accent-soft: #3a2914;
+  --on-accent: #1a0d0d;
+  --gold: #d4a64a;
+  --gold-soft: #3a2914;
+  --red: #c53030;
+  --wafat: #c9b8aa;
+  --wafat-soft: #2c1a1a;
+  --mawlid: #6fbf7c;
+  --eid: #e0b866;
+  --done: #4d9b5a;
+  --head-bg: rgba(212, 166, 74, .06);
+  --top-bg: rgba(20, 10, 10, .92);
+  --hero: linear-gradient(135deg, #7f1d1d, #2a0e0e);
+  --shadow: 0 2px 10px rgba(0, 0, 0, .35);
   color-scheme: dark;
 }
 
@@ -148,8 +162,8 @@ details.fold[open] > summary .chev { transform: rotate(180deg); }
 details.fold > summary.group-head:hover { filter: brightness(.97); }
 .group-head .count { color: var(--muted); font-size: .88em; }
 .group-head .ico { font-size: 1.2em; }
-.group.night .group-head { background: #1f2b3a; color: #e8eef7; border-color: #1f2b3a; }
-.group.night .group-head .count { color: #b9c6d8; }
+.group.night .group-head { background: var(--hero); color: #f3e9dc; border-color: transparent; }
+.group.night .group-head .count { color: #e0cdb8; }
 .group.occasion .group-head { background: var(--gold-soft); }
 
 .item {
@@ -199,7 +213,7 @@ dialog {
   max-height: 88vh; background: var(--surface); color: var(--text);
   box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
 }
-dialog::backdrop { background: rgba(10, 15, 12, .5); }
+dialog::backdrop { background: rgba(15, 5, 5, .6); }
 .dlg { display: flex; flex-direction: column; max-height: 88vh; }
 .dlg-head {
   display: flex; align-items: center; gap: 10px; padding: 14px 20px;
@@ -317,15 +331,15 @@ dialog::backdrop { background: rgba(10, 15, 12, .5); }
 
 /* ---------- الآن ---------- */
 .now-hero {
-  border-radius: 18px; padding: 20px 22px; margin-bottom: 16px; color: #fff;
-  background: linear-gradient(135deg, #1d6b52, #2b8a6a); box-shadow: var(--shadow);
+  border-radius: 18px; padding: 20px 22px; margin-bottom: 16px; color: #f8efe2;
+  border: 1px solid rgba(212, 166, 74, .35); background: var(--hero); box-shadow: var(--shadow);
 }
-.now-hero.p-fajr { background: linear-gradient(135deg, #6b4a7a, #c9787a); }
-.now-hero.p-morning { background: linear-gradient(135deg, #c98a2b, #e2b45a); }
-.now-hero.p-zuhr { background: linear-gradient(135deg, #2b7a8a, #4fa3a0); }
-.now-hero.p-evening { background: linear-gradient(135deg, #8a4a3a, #3a4a7a); }
-.now-hero.p-sleep { background: linear-gradient(135deg, #24304a, #3a4a6a); }
-.now-hero.p-night { background: linear-gradient(135deg, #0f1a30, #2a2f5a); }
+.now-hero.p-fajr { background: linear-gradient(135deg, #3d1f3a, #8f3a3a); }
+.now-hero.p-morning { background: linear-gradient(135deg, #8a5a1a, #c4923a); }
+.now-hero.p-zuhr { background: linear-gradient(135deg, #7f1d1d, #b0602a); }
+.now-hero.p-evening { background: linear-gradient(135deg, #6a1a1a, #2a0e0e); }
+.now-hero.p-sleep { background: linear-gradient(135deg, #2a1414, #4a2222); }
+.now-hero.p-night { background: linear-gradient(135deg, #140a0a, #3a1616); }
 .now-hero.setup { background: var(--surface); color: var(--text); border: 1px solid var(--line); }
 .now-hero.setup p { color: var(--muted); }
 .now-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
@@ -345,7 +359,7 @@ dialog::backdrop { background: rgba(10, 15, 12, .5); }
 .coord { width: 90px; border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px; padding: 4px 8px; direction: ltr; }
 .link-btn { background: none; border: none; color: var(--accent); font-size: .88em; font-weight: 600; padding: 2px 4px; }
 .link-btn:hover { text-decoration: underline; }
-.group.night .link-btn { color: #b9e0cf; }
+.group.night .link-btn { color: #e9c97d; }
 .now-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .ns { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; box-shadow: var(--shadow); }
 .ns small { display: block; color: var(--muted); }
@@ -364,7 +378,7 @@ dialog::backdrop { background: rgba(10, 15, 12, .5); }
   flex: none; border: 1px dashed var(--accent); color: var(--accent); background: none;
   border-radius: 99px; padding: 2px 10px; font-size: .82em; white-space: nowrap;
 }
-.wird-btn.on { background: var(--accent); color: #fff; border-style: solid; }
+.wird-btn.on { background: var(--accent); color: var(--on-accent); border-style: solid; }
 .item.in-wird { background: var(--accent-soft); }
 .wird-bar {
   display: flex; align-items: center; gap: 14px; justify-content: space-between;
@@ -372,7 +386,7 @@ dialog::backdrop { background: rgba(10, 15, 12, .5); }
 }
 .wird-bar small { display: block; color: var(--muted); }
 .wird-bar.editing { border-color: var(--accent); background: var(--accent-soft); }
-.primary-btn { flex: none; background: var(--accent); color: #fff; border: 1px solid var(--accent); border-radius: 10px; padding: 7px 18px; font-weight: 600; }
+.primary-btn { flex: none; background: var(--accent); color: var(--on-accent); border: 1px solid var(--accent); border-radius: 10px; padding: 7px 18px; font-weight: 600; }
 .primary-btn.ghost { background: none; color: var(--accent); }
 .progress-in { padding: 10px 18px 4px; }
 .group .kind-head { margin: 12px 18px 4px; }
@@ -450,10 +464,10 @@ details.how ol li::marker { color: var(--accent); font-weight: 700; }
 .dlg-body { font-family: var(--read-font, var(--text-font)); font-size: calc(1.6em * var(--read-scale, 1)); }
 .ayah { color: var(--accent); }
 .sura-head { display: block; text-align: center; color: var(--gold); font-weight: 700; }
-dialog.paper .dlg-body { background: #f7f0e1; color: #2b2418; }
-dialog.paper .dlg-body .ayah { color: #1d5c46; }
-:root[data-theme="dark"] dialog.paper .dlg-body { background: #2a2419; color: #eadfc8; }
-:root[data-theme="dark"] dialog.paper .dlg-body .ayah { color: #8fd3b5; }
+dialog.paper .dlg-body { background: #fbf4e6; color: #2a1414; }
+dialog.paper .dlg-body .ayah { color: #7f1d1d; }
+:root[data-theme="dark"] dialog.paper .dlg-body { background: #1c0f0f; color: #f3e9dc; }
+:root[data-theme="dark"] dialog.paper .dlg-body .ayah { color: #d4a64a; }
 #reportDialog { width: min(520px, 94vw); }
 .report-body { padding: 14px 20px 18px; display: flex; flex-direction: column; gap: 10px; }
 .report-body p { margin: 0; color: var(--muted); }
@@ -518,11 +532,11 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
   body.print-text-mode > *:not(#printArea) { display: none !important; }
   body.print-text-mode #printArea, body.print-page-mode #printArea { display: block; }
   body.print-page-mode .top { display: none; }
-  .print-head { display: flex; justify-content: space-between; border-bottom: 2px solid #a8792a; padding-bottom: 6px; margin-bottom: 14px; color: #1d6b52; }
-  #printArea h1 { color: #1d6b52; text-align: center; font-size: 18pt; margin: 6px 0 14px; }
+  .print-head { display: flex; justify-content: space-between; border-bottom: 2px solid #a8792a; padding-bottom: 6px; margin-bottom: 14px; color: #7f1d1d; }
+  #printArea h1 { color: #7f1d1d; text-align: center; font-size: 18pt; margin: 6px 0 14px; }
   #printArea .how-card { font-size: 11pt; margin-bottom: 14px; }
   .print-text { font-family: var(--read-font, var(--text-font)); font-size: 17pt; line-height: 2; white-space: pre-wrap; text-align: justify; }
-  .print-text .ayah { color: #1d5c46; }
+  .print-text .ayah { color: #7f1d1d; }
   .print-src { color: #555; font-size: 10pt; border-top: 1px solid #ccc; padding-top: 6px; margin-top: 16px; }
 }
 @media (max-width: 640px) { .print-btn { position: static; } }
@@ -567,7 +581,7 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
 .dlg-body mark { background: #ffe08a; color: inherit; border-radius: 3px; }
 .search-filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; }
 .fchip { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 3px 12px; font-size: .88em; }
-.fchip.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.fchip.on { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .search-filters select { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 3px 10px; font-size: .88em; }
 
 /* ---------- صلاة الليل خطوة بخطوة ---------- */
@@ -585,13 +599,12 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
 .g-nav { display: flex; justify-content: space-between; padding: 12px 20px; border-top: 1px solid var(--line); }
 .guide-card {
   display: flex; align-items: center; gap: 14px; width: 100%; text-align: start; margin-bottom: 16px;
-  background: linear-gradient(135deg, #0f1a30, #2a2f5a); color: #fff; border: none; border-radius: 14px; padding: 14px 18px;
+  background: linear-gradient(135deg, #2a0e0e, #6a1a1a); color: #f8efe2; border: 1px solid rgba(212, 166, 74, .35); border-radius: 16px; padding: 14px 18px;
 }
 .guide-card > span { font-size: 1.6em; }
 .guide-card div { flex: 1; }
 .guide-card small { display: block; opacity: .8; }
-.guide-btn { color: #2a2f5a; border-color: #2a2f5a55; }
-:root[data-theme="dark"] .guide-btn { color: #b9c6f0; }
+.guide-btn { color: var(--accent); border-color: var(--line); }
 @media print { .guide-card, .hilal-bar, .profile-sel, .qada-row button { display: none !important; } }
 @media (max-width: 640px) { .profile-sel { position: static; } }
 .sec-head.num { font-size: .8em; }
@@ -618,7 +631,7 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
 .q-row .sp { flex: 1; }
 .q-row .seg button { padding: 4px 10px; }
 .muted { color: var(--muted); }
-.q-continue { background: linear-gradient(135deg, #1d6b52, #2b8a6a); }
+.q-continue { background: var(--hero); }
 .q-find { width: 100%; box-sizing: border-box; border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; color: var(--text); font: inherit; }
 .q-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 .q-surah { display: flex; flex-direction: column; align-items: flex-start; text-align: start; gap: 1px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; position: relative; }
@@ -693,5 +706,35 @@ dialog.paper .dlg-body .ayah { color: #1d5c46; }
 
 /* أزرار السور داخل العمل */
 .q-links { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
-.q-link { border: 1px solid var(--line); background: none; color: var(--accent); border-radius: 999px; padding: 2px 10px; font-size: .85em; cursor: pointer; font-family: inherit; }
+.q-link { border: 1px solid var(--line); background: none; color: var(--accent); border-radius: 999px; padding: 1px 9px; font-size: .8em; cursor: pointer; font-family: inherit; }
 .q-link:hover { border-color: var(--accent); }
+
+/* ===== الهوية: عنابي وذهبي بخطّي نوتو كوفي وأميري (على نسق «الأربعينية الحسينية») ===== */
+body { background: var(--bg-grad) fixed, var(--bg); line-height: 1.7; }
+.top { background: var(--top-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: none; }
+.hijri { color: var(--gold); }
+.group, .progress-wrap, dialog { border-radius: 16px; }
+.group, .progress-wrap { background: linear-gradient(180deg, var(--surface), var(--surface-2)); }
+.group-head { background: var(--head-bg); }
+.group-head h3 { color: var(--gold); }
+.group.night .group-head h3 { color: #f3e9dc; }
+.banner { border-radius: 16px; }
+.banner.other { background: var(--surface); border-color: var(--line); }
+.item-src { color: var(--muted); }
+.kind-head { color: var(--gold); }
+.check { border-radius: 8px; border-color: var(--muted); background: transparent; }
+.item.done .check { color: #fff; }
+.bar { background: var(--head-bg); border: 1px solid var(--line); }
+.bar > i { background: linear-gradient(90deg, var(--gold), var(--accent)); }
+.tabs button { border-radius: 10px 10px 0 0; }
+.tabs button i { font-style: normal; margin-inline-end: 5px; filter: grayscale(.5); }
+.tabs button.active i { filter: none; }
+.tabs button.active { color: var(--gold); border-bottom-color: var(--gold); }
+.search-bar input { border-radius: 12px; }
+.read-btn { border-radius: 10px; }
+.dlg-head h2 { color: var(--gold); }
+:root[data-theme="dark"] .banner.mawlid { background: #1d2a1b; }
+:root[data-theme="dark"] .banner.eid { background: #3a2914; }
+:root[data-theme="dark"] .banner.wafat { background: #2c1a1a; }
+:root[data-theme="dark"] .group.occasion .group-head { background: rgba(212, 166, 74, .12); }
+.tabs button { padding: 9px 11px; font-size: .95em; }

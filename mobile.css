@@ -74,3 +74,33 @@ html.mobile, .mobile body { -webkit-tap-highlight-color: transparent; }
 }
 .install-hint b { color: var(--accent); }
 .install-hint button { float: left; background: none; border: none; font-size: 1.2em; color: var(--muted); }
+
+/* ===== شريط التبويبات السفلي و«المزيد» (على نسق «الأربعينية الحسينية») ===== */
+.mobile .tabs-wrap { display: none; }
+.mobile .date-box .trial-badge { position: static; display: inline-block; margin-top: 2px; font-size: .66em; padding: 0 9px; }
+.bnav {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 30; display: flex;
+  height: calc(62px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
+  background: var(--top-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top: 1px solid var(--line);
+}
+.bnav button {
+  flex: 1; min-width: 0; background: none; border: none; color: var(--muted); font-size: .68em; font-weight: 600;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 6px 0;
+}
+.bnav i { font-style: normal; font-size: 1.6em; line-height: 1.25; filter: grayscale(.6); }
+.bnav button.active { color: var(--gold); }
+.bnav button.active i { filter: none; }
+.mobile main { padding-bottom: calc(86px + env(safe-area-inset-bottom)); }
+.mobile .install-hint { bottom: calc(72px + env(safe-area-inset-bottom)); }
+.mobile dialog#moreSheet {
+  inset: auto 0 0 0; height: auto; max-height: 80dvh; margin: 0; border-radius: 20px 20px 0 0;
+  background: var(--surface-2); border-top: 1px solid var(--line);
+}
+.sheet-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px 0; color: var(--gold); font-size: 1.05em; }
+.more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 14px calc(18px + env(safe-area-inset-bottom)); }
+.more-grid button {
+  background: linear-gradient(180deg, var(--surface), var(--surface-2)); border: 1px solid var(--line); border-radius: 16px;
+  padding: 14px 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text); font-weight: 600; font-size: .88em;
+}
+.more-grid i { font-style: normal; font-size: 1.9em; line-height: 1.2; }
+.more-grid button.on { border-color: var(--gold); color: var(--gold); }
